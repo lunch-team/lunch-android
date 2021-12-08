@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:background="@color/colorBackground">
 
-    <LinearLayout
-        android:id="@+id/header"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
@@ -16,25 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/iv_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="left|center_vertical"
-            android:layout_margin="15dp"
-            android:adjustViewBounds="true"
-            app:srcCompat="@drawable/ic_arrow_back" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="타이틀"
-            android:textColor="@color/colorWhite"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-
-    </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
