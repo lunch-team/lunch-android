@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">lunch</string>
+    <string name="app_name">점심 뭐 먹지?</string>
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="prompt_email">아이디 또는 이메일</string>
     <string name="prompt_password">비밀번호</string>
@@ -9,4 +9,14 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+    <string name="check_password">비밀번호 확인</string>
+    <string name="name">이름</string>
+    <string name="id">아이디</string>
+    <string name="sign_up">회원가입</string>
+    <string name="review_no_data">등록된 리뷰가 없습니다.</string>
+    <string name="review">리뷰</string>
+
+
 </resources>

@@ -5,65 +5,57 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.util.Log
 import android.widget.Toast
 import com.lunchteam.lunch.BaseActivity
 import com.lunchteam.lunch.R
 import com.lunchteam.lunch.RequestHttpURLConnection
+import com.lunchteam.lunch.databinding.ActivitySignInBinding
+import com.lunchteam.lunch.util.MyApplication
 import org.json.JSONException
 import org.json.JSONObject
 
-class SignInActivity : BaseActivity(), View.OnClickListener {
+class SignInActivity : BaseActivity() {
     private var mContext: Context? = null
-    private val url = "http://192.168.0.15:9090/auth/login" // AsyncTask를 통해 HttpURLConnection 수행.
-    var tv_id: TextView? = null
-    var tv_password: TextView? = null
-    var bt_login: Button? = null
-    var tv_findid: TextView? = null
-    var tv_findpassword: TextView? = null
-    var tv_signup: TextView? = null
+    private var path = ""
+
+    private lateinit var binding: ActivitySignInBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        path = resources.getString(R.string.sign_in_path)
+
         mContext = this
-        init()
+
+        init();
+        initToolbar("")
     }
 
-    fun init() {
-        tv_id = findViewById(R.id.tv_id)
-        tv_password = findViewById(R.id.tv_password)
-        bt_login = findViewById(R.id.bt_login)
-        tv_findid = findViewById(R.id.tv_findid)
-        tv_findpassword = findViewById(R.id.tv_findpassword)
-        tv_signup = findViewById(R.id.tv_signup)
+    private fun init() {
+        binding.btLogin.setOnClickListener { login() }
+        binding.tvSignup.setOnClickListener {
+            val i = Intent(mContext, SignUpActivity::class.java)
+            startActivity(i)
+        }
     }
 
-    override fun onClick(v: View) {
-       /* when (v.id) {
-            R.id.bt_login -> login()
-            R.id.tv_findid -> {
-            }
-            R.id.tv_findpassword -> {
-            }
-            R.id.tv_signup -> {
-                val i = Intent(mContext, SignUpActivity::class.java)
-                startActivity(i)
-            }
-        }*/
-    }
-/*
+
     // 로그인 통신 함수
     private fun login() {
+        if (binding.etId.text.toString() == "" || binding.etPassword.text.toString() == "") {
+            Toast.makeText(mContext, "아이디 및 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            return;
+        }
         val values = JSONObject()
         try {
-            values.put("loginId", tv_id!!.text)
-            values.put("password", tv_password!!.text)
+            values.put("loginId", binding.etId.text)
+            values.put("password", binding.etPassword.text)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
+        var url = server_url + path
         val networkTask: NetworkTask = NetworkTask(url, values)
         networkTask.execute()
     }
@@ -83,15 +75,14 @@ class SignInActivity : BaseActivity(), View.OnClickListener {
             valuesJson = values
         }
 
-        protected override fun doInBackground(vararg params: Void): String? {
-            val result: String // 요청 결과를 저장할 변수.
+        override fun doInBackground(vararg p0: Void?): String? {
+            val result: String? // 요청 결과를 저장할 변수.
             val requestHttpURLConnection = RequestHttpURLConnection()
-            result = if (values != null) {
-                requestHttpURLConnection.request(url, values) // 해당 URL로 부터 결과물을 얻어온다.
-            } else {
+
+            result = if (values != null)
+                requestHttpURLConnection.request(url, values!!) // 해당 URL로 부터 결과물을 얻어온다.
+            else
                 requestHttpURLConnection.request(url, valuesJson)
-            }
-            values = null
             return result
         }
 
@@ -99,7 +90,35 @@ class SignInActivity : BaseActivity(), View.OnClickListener {
             super.onPostExecute(s) //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력한다.
             if (s == "401") {
                 Toast.makeText(mContext, "아이디 및 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                val loginToken: JSONObject
+                val memberInfo: JSONObject
+                val count: Int
+                try {
+                    val data = JSONObject(s)
+                    loginToken = data.getJSONObject("token")
+
+                    MyApplication.prefs.setString("accessToken", loginToken.get("accessToken").toString())
+                    MyApplication.prefs.setString("refreshToken", loginToken.get("refreshToken").toString())
+                    MyApplication.prefs.setString("accessTokenExpiresIn", loginToken.get("accessTokenExpiresIn").toString())
+
+                    // 자동로그인
+                    MyApplication.prefs.setString("autoLogin", "0")
+                    MyApplication.prefs.setString("isLogin", "1")
+
+
+                    memberInfo = data.getJSONObject("memberInfo")
+                    Toast.makeText(mContext, memberInfo.get("name").toString() + "님 안녕하세요", Toast.LENGTH_SHORT).show()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+
+                Log.d("dytest", "accessToken : " + MyApplication.prefs.getString("accessToken", "no accessToken"))
+                Log.d("dytest", "refreshToken : " + MyApplication.prefs.getString("refreshToken", "no refreshToken"))
+                Log.d("dytest", "accessTokenExpiresIn : " + MyApplication.prefs.getString("accessTokenExpiresIn", "no accessTokenExpiresIn"))
+
             }
+
         }
-    }*/
+    }
 }

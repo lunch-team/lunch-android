@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_list_path">local/menu/getAllMenu</string>
+    <string name="get_Menu_detail_path">local/menu/getMenuDetail</string>
+    <string name="sign_in_path">local/auth/login</string>
+    <string name="sign_up_path">local/auth/signup</string>
+    <string name="get_review_img_path">upload/</string>
+
+</resources>

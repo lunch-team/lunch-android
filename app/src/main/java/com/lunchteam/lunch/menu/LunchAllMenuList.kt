@@ -6,7 +6,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lunchteam.lunch.BaseActivity
@@ -20,7 +19,7 @@ import java.util.*
 
 class LunchAllMenuList : BaseActivity() {
     private var mContext: Context? = null
-    private val url = "http://58.181.28.53:11197/menu/getAllMenu" // AsyncTask를 통해 HttpURLConnection 수행.
+    private var path = ""
     private var list: ArrayList<JSONObject>? = null
     private var str_order: String? = null
     private var str_menuType: String? = null
@@ -33,11 +32,10 @@ class LunchAllMenuList : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLunchAllMenuListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        path = resources.getString(R.string.menu_list_path)
 
         // toolbar 셋팅
         initToolbar("메뉴리스트")
-
 
         showProgress(true)
 
@@ -49,8 +47,8 @@ class LunchAllMenuList : BaseActivity() {
 
         init();
 
-    }
 
+    }
 
 
     private fun init() {
@@ -86,7 +84,7 @@ class LunchAllMenuList : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        overridePendingTransition(0, 0)
+        // overridePendingTransition(0, 0)
     }
 
     // 프로그레스바 함수
@@ -120,6 +118,8 @@ class LunchAllMenuList : BaseActivity() {
         } catch (e: JSONException) {
             e.printStackTrace()
         }
+
+        var url = server_url + path
         val networkTask: NetworkTask = NetworkTask(url, values)
         networkTask.execute()
         showProgress(true)
@@ -185,7 +185,8 @@ class LunchAllMenuList : BaseActivity() {
             binding.rvMenu.layoutManager = LinearLayoutManager(mContext)
 
             // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-            val adapter = MenuAdapter(list)
+            val adapter = MenuAdapter(list!!, mContext)
+
 
             binding.rvMenu.adapter = adapter
             showProgress(false)

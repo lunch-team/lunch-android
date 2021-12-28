@@ -120,6 +120,9 @@ class RequestHttpURLConnection {
                 }
                 HttpURLConnection.HTTP_INTERNAL_ERROR -> {
                 }
+                HttpURLConnection.HTTP_CONFLICT -> {
+                    return "409"
+                }
                 else -> {
                     Log.d("dytest", "서버 문의^o^" + Integer.toString(urlConn.responseCode))
                     return null
