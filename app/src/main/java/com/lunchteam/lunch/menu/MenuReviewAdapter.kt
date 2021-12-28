@@ -60,9 +60,7 @@ class MenuReviewAdapter(private val reviewList: ArrayList<JSONObject>, context: 
                 5 -> txt_star.text = "★★★★★"
             }
 
-            var strDate = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            txt_date.text = strDate
-
+            txt_date.text = dateTime.substring(0, dateTime.indexOf("T"))
             txt_contents.text = contents
 
 

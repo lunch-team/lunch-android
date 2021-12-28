@@ -38,7 +38,6 @@
                 android:id="@+id/tv_restaurant_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="식당이름"
                 android:textColor="@color/colorText"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -64,7 +63,6 @@
             android:layout_marginHorizontal="15dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="주소"
             android:textSize="15sp" />
 
         <LinearLayout
@@ -86,7 +84,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="2.5"
                 android:textColor="@color/colorText" />
 
             <TextView
@@ -100,19 +97,19 @@
                 android:id="@+id/tv_review_top_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
                 android:textColor="@color/colorlightText" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                tools:ignore="NestedWeights" />
 
             <TextView
                 android:id="@+id/bt_review_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="리뷰작성"
+                android:text="@string/writereview"
                 android:textColor="@color/colorlightText" />
 
         </LinearLayout>
@@ -156,7 +153,6 @@
                 android:id="@+id/tv_review_length"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0개"
                 android:textColor="@color/colorlightText" />
         </LinearLayout>
 

@@ -33,6 +33,7 @@ class MenuAdapter(private val itemList: ArrayList<JSONObject>, context: Context?
         private val txt_manu: TextView = view.findViewById(R.id.tv_menu)
         private val txt_type: TextView = view.findViewById(R.id.tv_type)
         private val txt_visit: TextView = view.findViewById(R.id.tv_visit)
+        private val txt_star: TextView = view.findViewById(R.id.tv_reviewpt)
 
         fun bind(menu: JSONObject) {
 
@@ -44,11 +45,17 @@ class MenuAdapter(private val itemList: ArrayList<JSONObject>, context: Context?
             val visitCount = menu.getInt("visitCount")
             val recentVisit = menu.getString("recentVisit")
             val insertDateTime = menu.getString("insertDateTime")
+            val star = menu.getDouble("star")
 
 
             txt_manu.text = name
             txt_visit.text = Integer.toString(visitCount)
             txt_type.text = menuName
+            if (star > 0) {
+                txt_star.text = star.toString()
+            }else {
+                txt_star.text = "-"
+            }
 
             itemView.setOnClickListener {
                 Intent(mContext, LunchMenuDetail::class.java).apply {

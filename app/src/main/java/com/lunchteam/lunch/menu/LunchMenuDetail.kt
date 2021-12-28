@@ -2,14 +2,17 @@ package com.lunchteam.lunch.menu
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lunchteam.lunch.BaseActivity
 import com.lunchteam.lunch.R
 import com.lunchteam.lunch.RequestHttpURLConnection
 import com.lunchteam.lunch.databinding.ActivityLunchMenuDetailBinding
+import com.lunchteam.lunch.util.MyApplication
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -38,6 +41,18 @@ class LunchMenuDetail : BaseActivity() {
         mContext = this
 
         getMenuDetail(menuId)
+
+        binding.btReviewDetail.setOnClickListener {
+            if(!MyApplication.prefs.getString("accessToken", "").equals("")) {
+                Intent(mContext, WriteReviewActivity::class.java).apply {
+                    putExtra("id", menuId)
+                    putExtra("name", binding.tvRestaurantName.text.toString())
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }.run { mContext?.startActivity(this) }
+            }else {
+                Toast.makeText(mContext, "리뷰를 작성하려면 로그인이 필요합니다.",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private fun getMenuDetail(id: Int) {
@@ -124,15 +139,6 @@ class LunchMenuDetail : BaseActivity() {
                 e.printStackTrace()
             }
 
-/*
-            // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-            binding.rvMenu.layoutManager = LinearLayoutManager(mContext)
-
-            // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-            val adapter = MenuAdapter(list!!, mContext)
-
-
-            binding.rvMenu.adapter = adapter*/
             showProgress(false)
         }
 
