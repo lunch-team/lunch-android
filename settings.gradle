@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':photopicker1'
 rootProject.name = "lunch"

@@ -38,13 +38,12 @@ class LunchMenuDetail : BaseActivity() {
 
         // toolbar 셋팅
         initToolbar("메뉴 상세")
-        mContext = this
 
         getMenuDetail(menuId)
 
         binding.btReviewDetail.setOnClickListener {
             if(!MyApplication.prefs.getString("accessToken", "").equals("")) {
-                Intent(mContext, WriteReviewActivity::class.java).apply {
+                Intent(mContext, LunchWriteReview::class.java).apply {
                     putExtra("id", menuId)
                     putExtra("name", binding.tvRestaurantName.text.toString())
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -12,7 +12,6 @@ import com.lunchteam.lunch.R
 import me.relex.circleindicator.CircleIndicator
 import org.json.JSONArray
 import org.json.JSONObject
-import java.time.format.DateTimeFormatter
 
 
 class MenuReviewAdapter(private val reviewList: ArrayList<JSONObject>, context: Context?, var url: String) : RecyclerView.Adapter<MenuReviewAdapter.MenuViewHolder>() {
@@ -73,7 +72,10 @@ class MenuReviewAdapter(private val reviewList: ArrayList<JSONObject>, context: 
                 //var imgAdapter =
                 vpImg.adapter = MenuReviewImgAdapter(files, mContext!!, url)
                 if (files.length() > 1)
-                    indicator.setViewPager(vpImg);
+                    indicator.visibility = View.VISIBLE
+                else
+                    indicator.visibility = View.GONE
+                indicator.setViewPager(vpImg);
             } else
                 ll_img.visibility = View.GONE
 
