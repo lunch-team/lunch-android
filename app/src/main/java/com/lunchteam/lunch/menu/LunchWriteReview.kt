@@ -23,7 +23,7 @@ class LunchWriteReview : BaseActivity() {
     private var path = ""
     private var menuId = 0
     private var menuName = ""
-    private var selectStar = 5.0
+    private var selectStar = 10.0
 
     private val REQUEST_CODE = 273
 
@@ -91,11 +91,12 @@ class LunchWriteReview : BaseActivity() {
 
         binding.btSelectPhoto.setOnClickListener(View.OnClickListener {
             val intent = YPhotoPickerIntent(this)
-            intent.setMaxSelectCount(10) // 2020-03-24 최다영 추가, 해상도 값  나중에 변수로 넣기
+            intent.setMaxSelectCount(0) // 2020-03-24 최다영 추가, 해상도 값  나중에 변수로 넣기
             intent.setShowCamera(false) //주석 기존엔 true
             intent.setShowGif(false)
             intent.setSelectCheckBox(false)
             intent.setMaxGrideItemCount(4)
+            intent.setPreview(false)
             intent.setPhotoQuality(1000) // 2020-03-24 최다영 추가, 해상도 값  나중에 변수로 넣기
             startActivityForResult(intent, REQUEST_CODE)
         })
@@ -218,15 +219,27 @@ class LunchWriteReview : BaseActivity() {
         return false
     }
 
-
+    private lateinit var items: ArrayList<String?>
+    private lateinit var adapter: CustomAdapter
+    private var firstCheck = false
     private fun selectPhotoList(path: ArrayList<*>) {
+        items = path as ArrayList<String?>
+        if(firstCheck) {
+            var i=0
+            var tempitem = adapter.itemList
+            while (i< items.size) {
+                tempitem.add(items[i])
+                i++
+            }
+            items = tempitem
+        }
+        adapter = CustomAdapter(items, mContext)
+        firstCheck = true
 
-        val items: ArrayList<String?> = path as ArrayList<String?>
-        val adapter = CustomAdapter(items, mContext)
+
         //recyclerView 가로스크롤 적용
         binding.lvPhoto.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.lvPhoto.adapter = adapter
-
     }
 
     class CustomAdapter(val itemList: ArrayList<String?>, context: Context?) : RecyclerView.Adapter<CustomAdapter.PhotoHolder>() {

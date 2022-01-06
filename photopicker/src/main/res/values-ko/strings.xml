@@ -4,6 +4,7 @@
     <string name="y_photopicker_effect">편집</string>
     <string name="y_photopicker_done">완료</string>
     <string name="y_photopicker_done_with_count">완료(%1$d/%2$d)</string>
+    <string name="y_photopicker_done_with_count1">완료(%1$d)</string>
     <string name="y_photopicker_image_index">%1$d/%2$d</string>
     <string name="y_photopicker_undo">취소</string>
     <string name="y_photopicker_deleted_a_photo">사진이 삭제되었습니다.</string>

@@ -38,6 +38,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     public final static int ITEM_TYPE_PHOTO = 101;
 
     private boolean hasCamera = true;
+    private boolean isPreview = true;
     private boolean mIsCheckBoxOnly = false;
 
     public PhotoGridAdapter(Context mContext, List<PhotoDirectory> photoDirectories, boolean isCheckBoxOnly) {
@@ -104,12 +105,36 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             holder.ivPhoto.setSelected(isChecked);
 
             //사진 클릭 로직
-            holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            if (showPreview()) {
+                holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                    if (mIsCheckBoxOnly) {
+                        if (mIsCheckBoxOnly) {
+                            boolean isEnable = true;
+                            if (onItemCheckListener != null) {
+                                isEnable = onItemCheckListener.OnItemCheck(holder.getAdapterPosition(), photo, isChecked, getSelectedPhotos().size());
+                            }
+                            if (isEnable) {
+                                toggleSelection(photo);
+                                notifyItemChanged(holder.getAdapterPosition());
+                            }
+                        }
+                        //이미지 클릭 시 발생(이미지 크게 보기)
+                        else {
+                            if (onPhotoClickListener != null) {
+                                onPhotoClickListener.onClick(view, holder.getAdapterPosition(), showCamera());
+                            }
+                        }
+                    }
+                });
+            }else {
+                holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
                         boolean isEnable = true;
+
                         if (onItemCheckListener != null) {
                             isEnable = onItemCheckListener.OnItemCheck(holder.getAdapterPosition(), photo, isChecked, getSelectedPhotos().size());
                         }
@@ -118,14 +143,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
                             notifyItemChanged(holder.getAdapterPosition());
                         }
                     }
-                    //이미지 클릭 시 발생(이미지 크게 보기)
-                    else {
-                        if (onPhotoClickListener != null) {
-                            onPhotoClickListener.onClick(view, holder.getAdapterPosition(), showCamera());
-                        }
-                    }
-                }
-            });
+                });
+            }
 
             holder.vSelected.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -202,8 +221,15 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
         this.hasCamera = hasCamera;
     }
 
+    public void setShowPreview(boolean isPreview) {
+        this.isPreview = isPreview;
+    }
 
     public boolean showCamera() {
         return (hasCamera && currentDirectoryIndex == MediaStoreHelper.INDEX_ALL_PHOTOS);
+    }
+
+    public boolean showPreview() {
+        return isPreview ;
     }
 }

@@ -79,14 +79,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/img_star_harf" />
+                app:srcCompat="@drawable/img_star" />
 
             <ImageView
                 android:id="@+id/iv_star5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/img_no_star" />
+                app:srcCompat="@drawable/img_star" />
         </LinearLayout>
 
         <TextView

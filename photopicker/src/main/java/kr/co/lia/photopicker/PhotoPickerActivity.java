@@ -55,6 +55,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     public final static String KEY_SELECTED_PHOTOS = "SELECTED_PHOTOS";
     public final static String EXTRA_MAX_GRIDE_ITEM_COUNT = "MAX_GRIDE_IMAGE_COUNT";
     public final static String EXTRA_SET_PHOTO_QUALITY = "SET_PHOTO_QUALITY"; //2020-03-24 최다영 추가
+    public final static String EXTRA_SHOW_PREVIEW = "EXTRA_SHOW_PREVIEW"; // 2022-01-05 최다영 추가
 
     private boolean showCamera = true;
     private int m_sQuality = 0;
@@ -74,6 +75,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
      */
     private boolean menuIsInflated = false;
     private boolean showGif = false;
+    private boolean showPreview = true;
 
     //2020-03-24 최다영 추가
     private String m_saveImagePath;
@@ -171,6 +173,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         maxGrideItemCount = getIntent().getIntExtra(EXTRA_MAX_GRIDE_ITEM_COUNT, DEFAULT_MAX_GRIDE_ITEM_COUNT);
         m_sQuality = getIntent().getIntExtra(EXTRA_SET_PHOTO_QUALITY, 0);
         showGif = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
+        showPreview = getIntent().getBooleanExtra(EXTRA_SHOW_PREVIEW, true);
         setShowGif(showGif);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -197,6 +200,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
             pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.photoPickerFragment);
 
             pickerFragment.getPhotoGridAdapter().setShowCamera(showCamera);
+            pickerFragment.getPhotoGridAdapter().setShowPreview(showPreview);
             pickerFragment.getPhotoGridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
                 @Override
                 public boolean OnItemCheck(int position, Photo photo, final boolean isCheck, int selectedItemCount) {
@@ -205,7 +209,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
                     menuDoneItem.setEnabled(total > 0);
 
-                    if (maxCount <= 1) {
+                    if (maxCount == 1) {
                         List<Photo> photos = pickerFragment.getPhotoGridAdapter().getSelectedPhotos();
                         if (!photos.contains(photo)) {
                             photos.clear();
@@ -214,12 +218,15 @@ public class PhotoPickerActivity extends AppCompatActivity {
                         return true;
                     }
 
-                    if (total > maxCount) {
+                    if (total > maxCount && maxCount != 0) {
                         Toast.makeText(getActivity(), getString(R.string.y_photopicker_over_max_count_tips, maxCount),
                                 LENGTH_LONG).show();
                         return false;
                     }
-                    menuDoneItem.setTitle(getString(R.string.y_photopicker_done_with_count, total, maxCount));
+                    if(maxCount != 0)
+                        menuDoneItem.setTitle(getString(R.string.y_photopicker_done_with_count, total, maxCount));
+                    else
+                        menuDoneItem.setTitle(getString(R.string.y_photopicker_done_with_count1, total));
                     return true;
                 }
             });

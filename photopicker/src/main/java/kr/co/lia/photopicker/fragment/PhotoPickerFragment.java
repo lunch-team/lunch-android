@@ -7,13 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.appcompat.widget.ListPopupWindow;
-import androidx.recyclerview.widget.OrientationHelper;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +15,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 
-import kr.co.lia.photopicker.R;
+import androidx.appcompat.widget.ListPopupWindow;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.OrientationHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import kr.co.lia.photopicker.PhotoPickerActivity;
+import kr.co.lia.photopicker.R;
 import kr.co.lia.photopicker.adapter.PhotoGridAdapter;
 import kr.co.lia.photopicker.adapter.PopupDirectoryListAdapter;
 import kr.co.lia.photopicker.entity.Photo;
@@ -32,11 +37,6 @@ import kr.co.lia.photopicker.event.OnPhotoClickListener;
 import kr.co.lia.photopicker.utils.ImageCaptureManager;
 import kr.co.lia.photopicker.utils.MediaStoreHelper;
 import kr.co.lia.photopicker.utils.YPhotoPickerIntent;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static kr.co.lia.photopicker.PhotoPickerActivity.EXTRA_SHOW_GIF;
@@ -74,10 +74,12 @@ public class PhotoPickerFragment extends Fragment {
                 new MediaStoreHelper.PhotosResultCallback() {
                     @Override
                     public void onResultCallback(List<PhotoDirectory> dirs) {
-                        directories.clear();
-                        directories.addAll(dirs);
-                        photoGridAdapter.notifyDataSetChanged();
-                        listAdapter.notifyDataSetChanged();
+                        if (!(dirs.size() == 1 && dirs.get(0).getCoverPath() == null)) {
+                            directories.clear();
+                            directories.addAll(dirs);
+                            photoGridAdapter.notifyDataSetChanged();
+                            listAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
     }
@@ -91,12 +93,12 @@ public class PhotoPickerFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.util_fragment_photo_picker, container, false);
 
-        photoGridAdapter = new PhotoGridAdapter(getActivity(), directories , ((PhotoPickerActivity)getActivity()).isCheckBoxOnly);
+        photoGridAdapter = new PhotoGridAdapter(getActivity(), directories, ((PhotoPickerActivity) getActivity()).isCheckBoxOnly);
         listAdapter = new PopupDirectoryListAdapter(getActivity(), directories);
 
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_photos);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(((PhotoPickerActivity)getActivity()).maxGrideItemCount, OrientationHelper.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(((PhotoPickerActivity) getActivity()).maxGrideItemCount, OrientationHelper.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(photoGridAdapter);
@@ -189,7 +191,7 @@ public class PhotoPickerFragment extends Fragment {
 //                }
                 photoGridAdapter.notifyDataSetChanged();
             }
-        }else{
+        } else {
             photoGridAdapter.notifyDataSetChanged();
         }
     }

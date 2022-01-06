@@ -59,4 +59,8 @@ public class YPhotoPickerIntent extends Intent implements Parcelable {
 
   }
 
+  public void setPreview(Boolean isPreview){
+    this.putExtra(PhotoPickerActivity.EXTRA_SHOW_PREVIEW, isPreview);
+  }
+
 }
