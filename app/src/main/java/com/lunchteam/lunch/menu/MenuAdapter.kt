@@ -45,15 +45,21 @@ class MenuAdapter(private val itemList: ArrayList<JSONObject>, context: Context?
             val visitCount = menu.getInt("visitCount")
             val recentVisit = menu.getString("recentVisit")
             val insertDateTime = menu.getString("insertDateTime")
-            val star = menu.getDouble("star")
+            val getStar = menu.getDouble("star")
 
 
             txt_manu.text = name
             txt_visit.text = Integer.toString(visitCount)
             txt_type.text = menuName
-            if (star > 0) {
-                txt_star.text = star.toString()
-            }else {
+
+            var star = 0.0
+            if (getStar > 0) {
+                star = if (5 < getStar)
+                    getStar / 2
+                else
+                    getStar
+                txt_star.text = String.format("%.1f", star)
+            } else {
                 txt_star.text = "-"
             }
 

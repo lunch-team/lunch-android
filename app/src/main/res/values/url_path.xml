@@ -5,7 +5,12 @@
     <string name="sign_in_path">local/auth/login</string>
     <string name="sign_up_path">local/auth/signup</string>
     <string name="get_review_img_path">upload/</string>
-    <string name="upload_review_path">/local/menu/registerReview</string>
+    <string name="upload_review_path">local/menu/registerReview</string>
+    <string name="remove_review_path">local/menu/removeReview</string>
+    <string name="upload_photo_path">local/file/upload</string>
+
+
+
 
 
 

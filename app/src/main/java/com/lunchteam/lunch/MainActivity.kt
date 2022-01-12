@@ -1,11 +1,8 @@
 package com.lunchteam.lunch
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import com.lunchteam.lunch.databinding.ActivityMainBinding
 import com.lunchteam.lunch.mamber.SignInActivity
@@ -18,6 +15,8 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 로그레벨 세팅 Default : 0
+        setLogLevel(1)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -67,7 +66,7 @@ class MainActivity : BaseActivity() {
             var i = Intent(this, SignInActivity::class.java)
             startActivity(i)
         }
-
+        checkAllPermissions()
     }
 
     // 툴바 셋팅

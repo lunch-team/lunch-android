@@ -64,6 +64,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     implementation 'com.nineoldandroids:library:2.4.0'
 
+    // 이미지 업로드 위한 okttp 적용
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
 }
 repositories {
     mavenCentral()

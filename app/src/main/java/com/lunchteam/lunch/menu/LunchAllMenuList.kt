@@ -43,13 +43,17 @@ class LunchAllMenuList : BaseActivity() {
         str_menuType = "all"
         str_orderType = "COUNT"
         str_order = "ASC"
-        getMenuList(str_menuType, str_orderType, str_order)
 
         init();
 
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 화면 포커스 받을 때 리스트 새로고침적용
+        getMenuList(str_menuType, str_orderType, str_order)
+    }
 
     private fun init() {
 
@@ -81,11 +85,6 @@ class LunchAllMenuList : BaseActivity() {
         }
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        // overridePendingTransition(0, 0)
-    }
 
     // 프로그레스바 함수
     fun showProgress(isShow: Boolean) {
@@ -125,6 +124,7 @@ class LunchAllMenuList : BaseActivity() {
         showProgress(true)
     }
 
+    // 메뉴 정렬방법 셋팅 함수
     private fun setToggle(select: TextView, unselected1: TextView, unselected2: TextView) {
         // 첫번째 인자가 선택된(click) 객체
         select.background = ContextCompat.getDrawable(this, R.drawable.ic_roundbtn)

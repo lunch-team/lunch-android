@@ -108,7 +108,11 @@ class SignInActivity : BaseActivity() {
 
 
                     memberInfo = data.getJSONObject("memberInfo")
+                    MyApplication.prefs.setString("memberId", memberInfo.get("id").toString())
+                    MyApplication.prefs.setString("email", memberInfo.get("email").toString())
+                    MyApplication.prefs.setString("loginId", memberInfo.get("loginId").toString())
                     Toast.makeText(mContext, memberInfo.get("name").toString() + "님 안녕하세요", Toast.LENGTH_SHORT).show()
+                    finish()
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
