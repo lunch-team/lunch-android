@@ -8,10 +8,9 @@
     <string name="upload_review_path">local/menu/registerReview</string>
     <string name="remove_review_path">local/menu/removeReview</string>
     <string name="upload_photo_path">local/file/upload</string>
-
-
-
-
+    <string name="visit_menu_path">local/menu/visitMenu</string>
+    <string name="get_visit_menulist_path">local/menu/getVisitMenuList</string>
+    <string name="delete_menu_log_path">local/menu/deleteMenuLog</string>
 
 
 </resources>

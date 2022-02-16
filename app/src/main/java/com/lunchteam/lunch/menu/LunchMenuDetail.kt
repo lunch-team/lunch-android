@@ -65,8 +65,21 @@ class LunchMenuDetail : BaseActivity() {
                                 Toast.makeText(mContext, "${items[which]} is Selected", Toast.LENGTH_SHORT).show()
                             1 -> // 수정하기
                                 Toast.makeText(mContext, "${items[which]} is Selected", Toast.LENGTH_SHORT).show()
-                            2 -> // 방문추가
+                            2 -> {// 방문추가
+                                val values = JSONObject()
+                                try {
+                                    values.put("id", menuId)
+                                } catch (e: JSONException) {
+                                    e.printStackTrace()
+                                }
+
+                                var url = server_url + resources.getString(R.string.visit_menu_path)
+                                var moreMenuTask: MoreMenuTask = MoreMenuTask(url, values)
+                                moreMenuTask.execute()
+
+                                showProgress(true)
                                 Toast.makeText(mContext, "${items[which]} is Selected", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                     .show()
@@ -88,7 +101,7 @@ class LunchMenuDetail : BaseActivity() {
         }
 
         var url = server_url + path
-        val networkTask: NetworkTask = NetworkTask(url, values)
+        val networkTask: GetReviewTask = GetReviewTask(url, values)
         networkTask.execute()
         showProgress(true)
 
@@ -103,7 +116,7 @@ class LunchMenuDetail : BaseActivity() {
     }
 
 
-    inner class NetworkTask : AsyncTask<Void, Void, String> {
+    inner class GetReviewTask : AsyncTask<Void, Void, String> {
         private var url: String
         private var values: ContentValues? = null
         private var valuesJson: JSONObject? = null
@@ -192,6 +205,41 @@ class LunchMenuDetail : BaseActivity() {
 
             binding.rvReview.adapter = adapter
         }
+    }
+
+
+    inner class MoreMenuTask : AsyncTask<Void, Void, String> {
+        private var url: String
+        private var values: ContentValues? = null
+        private var valuesJson: JSONObject? = null
+
+        constructor(url: String, values: ContentValues?) {
+            this.url = url
+            this.values = values
+        }
+
+        constructor(url: String, values: JSONObject?) {
+            this.url = url
+            valuesJson = values
+        }
+
+        override fun doInBackground(vararg p0: Void): String? {
+            val result: String? // 요청 결과를 저장할 변수.
+            val requestHttpURLConnection = RequestHttpURLConnection()
+
+            result = if (values != null)
+                requestHttpURLConnection.request(url, values!!) // 해당 URL로 부터 결과물을 얻어온다.
+            else
+                requestHttpURLConnection.request(url, valuesJson)
+            return result
+        }
+
+        public override fun onPostExecute(s: String?) {
+            super.onPostExecute(s) //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력한다.
+            lunchLog(s.toString())
+            showProgress(false)
+        }
+
     }
 
     // Activity Result 가 있는 경우 실행되는 콜백함수
